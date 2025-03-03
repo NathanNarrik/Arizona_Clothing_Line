@@ -1,0 +1,101 @@
+<!-- FILEPATH: /home/narrik/nathan/learnpython/Arizona_Project/templates/login.html -->
+<!-- BEGIN: be15d9bcejpp -->
+<style>
+    /* existing styles */
+    
+.left-image {
+        /* existing styles */
+        border-right: 5px solid #2E8B57;
+    }
+</style>
+<style>
+    body {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+        background-color: #F0FFF4;
+        font-family: 'Open Sans', sans-serif;
+    }
+    
+    form {
+        margin-left: 50%;
+        background-color: #FFFFFF;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        font-size: 3rem;
+        margin-left: 50%;
+        padding: 0;
+        color: #2E8B57;
+        text-shadow: 2px 2px #FFFFFF;
+    }
+
+    label {
+        margin-left: 10px;
+        font-size: 1.5rem;
+        text-align: center;
+        color: #2E8B57;
+        text-shadow: 1px 1px #FFFFFF;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        font-size: 1.5rem;
+        text-align: center;
+        width: 100%;
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="submit"] {
+        font-size: 1.5rem;
+        margin-top: 1rem;
+        width: 100%;
+        background-color: #2E8B57;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+    }
+
+    .left-image {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 50%;
+        height: 100%;
+        object-fit: cover;
+    }
+</style>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>The Arizona Clothing Line</title>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    </head>
+    <body>
+        <img class="left-image" src="https://img.freepik.com/premium-photo/clothesline-with-freshly-laundered-sheets-towels-ready-be-used_124507-102214.jpg" alt="Arizona landscape">
+        <h1>The Arizona Clothes Line</h1>
+        <form action="/login_complete" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username"><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password"><br>
+            <input type="submit" value="Login">
+        </form>
+    </body>
+</html>
+

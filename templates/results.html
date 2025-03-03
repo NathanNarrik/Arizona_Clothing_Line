@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{user.get_username() + "'s "}} Stats</title>
+    <style>
+        /* Styling for the page */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #a8d8b9; /* changed background color to green */
+            font-family: 'Open Sans', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .eco-friendly-container {
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px;
+        }
+
+        .logout-form {
+            display: inline;
+            background-color: #6DBA45; /* Eco-friendly color */
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .logout-button {
+            background-color: #4A9431; /* Darker eco-friendly color */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .logout-button:hover {
+            background-color: #346922; /* Hover color */
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            max-width: 100%;
+        }
+
+        .box {
+            width: calc(50% - 10px);
+            height: 45%;
+            background-color: #b8d8d8;
+            border-radius: 2px;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+            margin: 10px;
+            padding: 20px;
+        }
+
+        /* Styling for the number */
+        .number {
+            font-size: 48px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Styling for the list */
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Additional styles for specific boxes */
+        .bottom-left, .bottom-right {
+            width: calc(50% - 10px);
+            height: 45%;
+            background-color: #b8d8d8;
+            border-radius: 2px;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+            margin: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .bottom-left .heading, .bottom-right .heading {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .bottom-left .large-rectangle, .bottom-right .large-rectangle {
+            width: 90%;
+            height: 50%;
+            margin: 10px auto;
+            background-color: #b8d8d8;
+            border-radius: 10px;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="box top-left">
+        <h2 class="heading" style="text-align: center; font-size: 36px;">Calculations</h2>
+        <ul style="font-size: calc(48px * 0.6); display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; text-align: left;">
+            <li style="color: rgb(0, 0, 0); margin-bottom: 40px;">Windspeed at {{user.user_city()}}: <span style="color: rgb(134, 134, 163); font-weight: bold;"><span style="border-radius: 50%; background-color: #b8d8d8; padding: 10px 20px; margin-right: 20px;">{{user.get_wind_speed()}} meter/second</span></span></li>
+            <li style="color: rgb(0, 0, 0);margin-bottom: 40px;">Humidity at {{user.user_city()}}: <span style="color: rgb(25, 12, 201); font-weight: bold;"><span style="border-radius: 50%; background-color: #b8d8d8; padding: 10px 20px; margin-right: 20px;">{{user.get_humidity()}}%</span></span></li>
+            <li style="color: rgb(0, 0, 0);margin-bottom: 40px;">Temperature at {{user.user_city()}}: <span style="color: red; font-weight: bold;"><span style="border-radius: 50%; background-color: #b8d8d8; padding: 10px 20px; margin-right: 20px;">{{32 +1.8*(user.get_temperature()-273)}} Fahrenheit</span></span></li>
+            <li></li><li></li><li></li><li></li><li></li>
+            <li style="color: rgb(0, 0, 0);font-size: 30px;"><span class="time-label">Time</span> = 0.11634 * 1.0677<sup>Temperature</sup> * (25 + 19(Windspeed)) * (1 - Humidity)</li>
+        </ul>
+    </div>
+    <div class="box top-right">
+        <div class="flex-container" style="display: flex; justify-content: center;">
+            <div class="box top-left" style="width: 50%; height: 350px;"> 
+                <h2 class="heading" style="text-align: center; font-size: 36px;">Drying Time</h2>
+                <div class="number" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <div style="font-size: 72px; font-weight: bold; color: #008000; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); animation
+                    : pop 0.5s ease-in-out;">
+                        {{user.calculate_time()}}
+                    </div>
+                    <div style="font-size: 24px;color: #008000;">minutes</div>
+                </div>
+            </div>
+            <div class="box top-right" style="width: 50%; height: 350px;"> 
+                <h2 class="heading" style="text-align: center; font-size: 36px;">Energy Saved</h2>
+                <div class="number" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <div style="font-size: 72px; font-weight: bold; color: #008000; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); animation: pop 0.5s ease-in-out;">
+                        {{user.calculate_energy_saved_instance(num_clothes)}}
+                    </div>
+                    <div style="font-size: 24px; color: #008000;">kilowatts</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box top-left">
+        <h2 class="heading" style="text-align: center; font-size: 36px;">How Have You Helped our Planet?</h2>
+        <p style="font-size: 24px; font-family: 'Roboto', sans-serif; color: #333333; line-height: 1.65;">Hi {{user.get_username()}}! Good job opting to dry your clothes outside on a line versus using a dryer. The sun is a source of energy that we see every single day, so why not use it! As you can see below there is an Eco Points counter. This is a measure of how many pounds of CO2 you are avoiding pumping into the atmosphere. For every cycle of your dryer runs, roughly 2.25 pounds of CO2 is pumped into the atmosphere; thus using this web app enables to reduce you carbon footprint on our beloved planet earth. It looks like you have {{user.get_eco_points()}} points, so you have avoided {{user.get_eco_points()}} pounds of CO2 pollution!</p>
+    </div>
+    <div class="box top-right">
+        <h2 class="heading" style="text-align: center; font-size: 36px;">Overall Stats</h2>
+        <div class="flex-container" style="display: flex; justify-content: center;">
+            <div class="box top-left" style="width: 50%; height: 250px;"> <!-- Adjust the height as needed -->
+                <h2 class="heading" style="text-align: center; font-size: 36px;">Total Eco-points</h2>
+                <div class="number" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <div style="font-size: 72px; font-weight: bold; color: #008000; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); animation: pop 0.5s ease-in-out;">
+                        {{user.get_eco_points()}}
+                    </div>
+                </div>
+            </div>
+            <div class="box top-right" style="width: 50%; height: 250px;"> <!-- Adjust the height as needed -->
+                <h2 class="heading" style="text-align: center; font-size: 36px;">Total Energy Saved</h2>
+                <div class="number" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <div style="font-size: 72px; font-weight: bold; color: #008000; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); animation: pop 0.5s ease-in-out;">
+                        {{user.calculate_energy_saved()}}
+                    </div>
+                    <div style="font-size: 24px;">kilowatts</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="eco-friendly-container">
+    <form action="/logout" method="post" class="logout-form">
+        <input type="submit" value="LOGOUT" class="logout-button">
+    </form>
+</div>
+</body>
+</html>
