@@ -29,6 +29,19 @@ is_interim_tag() {
   esac
 }
 
+get_tag_prefix() {
+  # A350_interim_02_12_2026 -> A350
+  local tag="$1"
+  echo "${tag%_interim_*}"
+}
+
+get_today_interim_tag() {
+  local prefix="$1"
+  local today
+  today="$(date +%m_%d_%Y)"
+  echo "${prefix}_interim_${today}"
+}
+
 get_head_rev() {
   local file="$1"
 
@@ -241,40 +254,44 @@ if [ -z "${LATEST_LOAD:-}" ]; then
   exit 1
 fi
 
-echo "Most recent interim: $LATEST_LOAD"
-
+SIM_PREFIX="$(get_tag_prefix "$LATEST_LOAD")"
+NEW_LOAD="$(get_today_interim_tag "$SIM_PREFIX")"
 TODAY="$(date +%m_%d_%Y)"
-OUTFILE="change_log_${LATEST_LOAD}_${TODAY}.txt"
+
+echo "Baseline interim: $LATEST_LOAD"
+echo "New interim name: $NEW_LOAD"
+
+OUTFILE="change_log_${NEW_LOAD}.txt"
 
 list_working_files > "$work_list"
 list_files_in_load "$LATEST_LOAD" "$load_list"
 
 comm -12 "$work_list" "$load_list" > "$common"
 comm -23 "$work_list" "$load_list" > "$added"
-
-# Files in the load but not present now
 comm -13 "$work_list" "$load_list" > "$removed"
 
 : > "$unchanged"
 
 {
 echo "============================================================"
-echo "CHANGE LOG: MOST RECENT INTERIM TO CURRENT"
+echo "CHANGE LOG: INTERIM TO NEW INTERIM GENERATED TODAY"
 echo "============================================================"
-echo "Interim tag:      $LATEST_LOAD"
+echo "Baseline interim: $LATEST_LOAD"
+echo "New interim name: $NEW_LOAD"
 echo "Run directory:    $(pwd)"
 echo "Generated:        $(date)"
 echo
-echo "This report compares the most recent interim tag"
-echo "to the current state of the RCS-controlled codebase."
+echo "This report compares the most recent existing interim tag"
+echo "to the current RCS HEAD state, treating the current state"
+echo "as the new interim being generated today."
 echo
 
 echo "SUMMARY COUNTS"
 echo "------------------------------------------------------------"
 echo "RCS-controlled files now      : $(wc -l < "$work_list" | tr -d ' ')"
-echo "Files in interim tag          : $(wc -l < "$load_list" | tr -d ' ')"
-echo "Added since interim          : $(wc -l < "$added" | tr -d ' ')"
-echo "Removed since interim        : $(wc -l < "$removed" | tr -d ' ')"
+echo "Files in baseline interim     : $(wc -l < "$load_list" | tr -d ' ')"
+echo "Added in new interim          : $(wc -l < "$added" | tr -d ' ')"
+echo "Removed since baseline        : $(wc -l < "$removed" | tr -d ' ')"
 echo
 
 echo "============================================================"
@@ -290,7 +307,7 @@ cat "$removed"
 echo
 
 echo "============================================================"
-echo "PER-FILE LOG ENTRIES (from $LATEST_LOAD to current HEAD)"
+echo "PER-FILE LOG ENTRIES (from $LATEST_LOAD to $NEW_LOAD)"
 echo "============================================================"
 
 while IFS= read -r f; do
@@ -300,7 +317,7 @@ while IFS= read -r f; do
   if [ -z "${load_rev:-}" ] || [ -z "${head_rev:-}" ]; then
     echo "------------------------------------------------------------"
     echo "FILE: $f"
-    echo "WARN: could not resolve revisions (interim='$load_rev', head='$head_rev')"
+    echo "WARN: could not resolve revisions (baseline='$load_rev', head='$head_rev')"
     echo
     continue
   fi
@@ -312,8 +329,8 @@ while IFS= read -r f; do
 
   echo "------------------------------------------------------------"
   echo "FILE: $f"
-  echo "Interim revision ($LATEST_LOAD): $load_rev"
-  echo "Current head revision          : $head_rev"
+  echo "Baseline revision ($LATEST_LOAD): $load_rev"
+  echo "New interim revision ($NEW_LOAD): $head_rev"
   echo
 
   if rev_lt "$load_rev" "$head_rev"; then
@@ -327,7 +344,7 @@ while IFS= read -r f; do
 done < "$common"
 
 echo "============================================================"
-echo "FILES UNCHANGED (same revision as $LATEST_LOAD)"
+echo "FILES UNCHANGED (same revision in $LATEST_LOAD and $NEW_LOAD)"
 echo "============================================================"
 cat "$unchanged"
 
